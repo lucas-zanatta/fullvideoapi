@@ -6,36 +6,12 @@ services:
       context: .
       dockerfile: api/Dockerfile
     restart: always
-    environment:
-      - REDIS_URL=redis://redis:6379/0
-    depends_on:
-      - redis
-    networks:
-      - fullvideo-network
+    # As variáveis de ambiente serão configuradas na interface do EasyPanel
 
   worker:
     build:
       context: .
       dockerfile: worker/Dockerfile
     restart: always
-    environment:
-      - REDIS_URL=redis://redis:6379/0
-    depends_on:
-      - redis
-    networks:
-      - fullvideo-network
+    # As variáveis de ambiente serão configuradas na interface do EasyPanel
 
-  redis:
-    image: 'redis:7-alpine'
-    restart: always
-    networks:
-      - fullvideo-network
-    volumes:
-      - redis-data:/data
-
-networks:
-  fullvideo-network:
-    driver: bridge
-
-volumes:
-  redis-data:
