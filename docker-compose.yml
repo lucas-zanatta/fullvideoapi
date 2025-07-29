@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    restart: always
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    networks:
+      - fullvideo-network
+
+  worker:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    restart: always
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    networks:
+      - fullvideo-network
+
+  redis:
+    image: 'redis:7-alpine'
+    restart: always
+    networks:
+      - fullvideo-network
+    volumes:
+      - redis-data:/data
+
+networks:
+  fullvideo-network:
+    driver: bridge
+
+volumes:
+  redis-data:
